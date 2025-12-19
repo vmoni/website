@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Self Practice – Upload & Retry Questions</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      background: #f4f6f8;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #2c3e50;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+      color: #2c3e50;
+    }
+    label {
+      font-weight: bold;
+    }
+    textarea, input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0 15px 0;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 10px 16px;
+      border: none;
+      background: #2980b9;
+      color: white;
+      font-size: 14px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1f6391;
+    }
+    .question-box {
+      margin-top: 20px;
+      padding: 15px;
+      background: #ecf0f1;
+      border-radius: 6px;
+    }
+    .answer {
+      margin-top: 10px;
+      padding: 10px;
+      background: #ffffff;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    .hidden {
+      display: none;
+    }
+    footer {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Self Practice Website</h1>
+  <p>Upload your own questions and try answering again</p>
+</header>
+
+<div class="container">
+  <h2>Select Subject Area</h2>
+  <label>Choose Section</label>
+  <select id="sectionSelect" onchange="switchSection()" style="padding:10px; width:100%; margin-bottom:20px;">
+    <option value="c">C Programming</option>
+    <option value="embedded">Embedded Systems</option>
+  </select>
+
+  <!-- C Programming Section -->
+  <div id="cSection">
+    <h2>1. Add C Programming Question</h2>
+
+    <label>Question</label>
+    <textarea id="cQuestionInput" rows="4" placeholder="Enter C programming question..."></textarea>
+
+    <label>Correct Answer</label>
+    <textarea id="cAnswerInput" rows="3" placeholder="Enter correct answer..."></textarea>
+
+    <button onclick="addQuestion('c')">Save Question</button>
+  </div>
+
+  <!-- Embedded Section -->
+  <div id="embeddedSection" class="hidden">
+    <h2>1. Add Embedded Systems Question</h2>
+
+    <label>Question</label>
+    <textarea id="eQuestionInput" rows="4" placeholder="Enter embedded systems question..."></textarea>
+
+    <label>Correct Answer</label>
+    <textarea id="eAnswerInput" rows="3" placeholder="Enter correct answer..."></textarea>
+
+    <button onclick="addQuestion('embedded')">Save Question</button>
+  </div>
+
+  <hr />
+
+  <h2>2. Try the Question</h2>
+  <div id="questionArea" class="question-box hidden">
+    <p id="displayQuestion"></p>
+
+    <label>Your Answer</label>
+    <textarea id="userAnswer" rows="4"></textarea>
+
+    <button onclick="showAnswer()">Check Answer</button>
+
+    <div id="answerArea" class="answer hidden">
+      <strong>Correct Answer:</strong>
+      <p id="displayCorrectAnswer"></p>
+    </div>
+
+    <br />
+    <button onclick="retryQuestion()">Try Again</button>
+  </div>
+</div>
+
+<footer>
+  <p>Simple self-learning tool | No internet required | Runs locally</p>
+</footer>
+
+<script>
+  let questions = {
+    c: { q: "", a: "" },
+    embedded: { q: "", a: "" }
+  };
+
+  function switchSection() {
+    const section = document.getElementById("sectionSelect").value;
+    document.getElementById("cSection").classList.add("hidden");
+    document.getElementById("embeddedSection").classList.add("hidden");
+
+    if (section === "c") {
+      document.getElementById("cSection").classList.remove("hidden");
+    } else {
+      document.getElementById("embeddedSection").classList.remove("hidden");
+    }
+  }
+
+  function addQuestion(section) {
+    let q, a;
+
+    if (section === 'c') {
+      q = document.getElementById("cQuestionInput").value.trim();
+      a = document.getElementById("cAnswerInput").value.trim();
+    } else {
+      q = document.getElementById("eQuestionInput").value.trim();
+      a = document.getElementById("eAnswerInput").value.trim();
+    }
+
+    if (q === "" || a === "") {
+      alert("Please enter both question and answer");
+      return;
+    }
+
+    questions[section].q = q;
+    questions[section].a = a;
+
+    document.getElementById("displayQuestion").innerText = q;
+    document.getElementById("displayCorrectAnswer").innerText = a;
+
+    document.getElementById("questionArea").classList.remove("hidden");
+    document.getElementById("answerArea").classList.add("hidden");
+    document.getElementById("userAnswer").value = "";
+
+    alert("Question saved for " + section.toUpperCase());
+  }
+
+  function showAnswer() {
+    document.getElementById("answerArea").classList.remove("hidden");
+  }
+
+  function retryQuestion() {
+    document.getElementById("userAnswer").value = "";
+    document.getElementById("answerArea").classList.add("hidden");
+  }
+</script>
+
+</body>
+</html>
